@@ -1,5 +1,5 @@
 # 💫 About Me:
-I am an Android Enthusiast<br>And also interested in Cloud
+Final year B.Tech CSE student specializing in IoT. Freelance Linux System Admin. Passionate about technology.
 
 
 # 💻 Tech Stack:
