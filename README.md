@@ -84,20 +84,28 @@ engineer:
 A typical delivery flow I design and operate:
 
 ```mermaid
-flowchart LR
-    DEV([Developer]) -->|git push| GIT[(Git Repo)]
-    GIT -->|webhook| CI{{CI Pipeline}}
-    CI --> T[Lint & Unit Tests]
-    T --> S[SAST / Trivy Scan]
-    S --> B[Build & Push Image]
-    B --> REG[(Container Registry)]
-    REG -->|image tag bump| GO[GitOps Repo]
+flowchart TB
+    DEV([Developer]) -->|git push| GIT[(Git repo)]
+    GIT --> CI
+
+    subgraph CI [CI pipeline]
+        direction LR
+        T[Lint + test] --> S[SAST + Trivy] --> B[Build + push]
+    end
+
+    CI --> REG[(Registry)]
+    REG -->|tag bump| GO[GitOps repo]
     GO -->|sync| ARGO[Argo CD]
-    ARGO --> K8S[[Kubernetes Cluster]]
-    K8S --> OBS[Prometheus · Grafana · Loki]
-    OBS -.->|alerts| DEV
+    ARGO --> K8S
+
+    subgraph RUN [Runtime]
+        direction LR
+        K8S[[Kubernetes]] --> OBS[Prometheus + Grafana + Loki]
+    end
+
     TF[Terraform] -->|provisions| CLOUD[(AWS / Azure / GCP)]
-    CLOUD --- K8S
+    CLOUD --> K8S
+    OBS -.->|alerts| DEV
 ```
 
 ---
@@ -195,7 +203,7 @@ spec:
 
 <div align="center">
 
-<img height="180" src="https://github-readme-stats.vercel.app/api?username=PavanPadamata&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true&rank_icon=github" alt="GitHub stats" />
+<img height="180" src="https://github-readme-stats.vercel.app/api?username=PavanPadamata&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&rank_icon=github" alt="GitHub stats" />
 <img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=PavanPadamata&layout=donut&langs_count=8&theme=tokyonight&hide_border=true" alt="Top languages" />
 
 <img src="https://streak-stats.demolab.com/?user=PavanPadamata&theme=tokyonight&hide_border=true" alt="GitHub streak" />
